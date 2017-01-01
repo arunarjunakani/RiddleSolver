@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,7 +8,7 @@ import java.util.Arrays;
 public class RiddleSolver {
 
     public static String[][][] data;
-
+    public static int houseNumber;
     /**
      * This is the main method where all of the solving will be happening
      * @param String[]
@@ -15,7 +16,8 @@ public class RiddleSolver {
      */
     public static void main(String[] args) {
         data = new String[5][5][];
-        for(int i = 0; i < 5; i++)
+        houseNumber = -1;
+        for(int i = 0; i < 5; i++) //Initializes the array
         {
             for(int j = 0; j < 5; j++)
             {
@@ -40,7 +42,24 @@ public class RiddleSolver {
             }
         }
 
-        displayData();
+        while (true)
+        {
+            data[4][0] = new String[]{"F"};
+            data[2][2] = new String[]{"Pa"};
+            displayData();
+
+            readRules();
+
+            eliminateOptions();
+
+            //Checks to see if the game was won
+            if(gameWon())
+            {
+                displayData();
+                System.out.println("You have cracked the case! The fish is in House " + houseNumber + "!");
+                break;
+            }
+        }
     }
 
     private static void displayData()
@@ -72,7 +91,28 @@ public class RiddleSolver {
      */
     private static void eliminateOptions()
     {
-
+        for(String[][] row : data)
+        {
+            for(String[] cell: row)
+            {
+                if(cell.length == 1)
+                {
+                    String value = cell[0];
+                    cell[0] = "1" + value; //All finalized ones will
+                    for(int i = 0; i < 5; i++)
+                    {
+                        ArrayList<String> options = new ArrayList<>(Arrays.asList(row[i]));
+                        if(options.contains(value))
+                        {
+                            options.remove(value);
+                        }
+                        String[] arr = new String[options.size()];
+                        arr = options.toArray(arr);
+                        row[i] = arr;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -80,12 +120,13 @@ public class RiddleSolver {
      * @param null
      * @return boolean
      */
-    private boolean gameWon()
+    private static boolean gameWon()
     {
-        for(String[] cell: data[4])
+        for(int i = 0; i < 5; i++)
         {
-            if(cell.length == 1 && cell[0].equals("Fish"))
+            if(data[4][i][0].equals("1F"))
             {
+                houseNumber = i;
                 return true;
             }
         }
