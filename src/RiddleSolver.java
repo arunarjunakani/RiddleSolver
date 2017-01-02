@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 public class RiddleSolver {
 
     public static String[][][] data;
-    public static int houseNumber;
+    public static int answer;
     /**
      * This is the main method where all of the solving will be happening
      * @param String[]
@@ -16,7 +17,7 @@ public class RiddleSolver {
      */
     public static void main(String[] args) {
         data = new String[5][5][];
-        houseNumber = -1;
+        answer = -1;
         for(int i = 0; i < 5; i++) //Initializes the array
         {
             for(int j = 0; j < 5; j++)
@@ -45,15 +46,16 @@ public class RiddleSolver {
         while (true)
         {
             displayData();
-            //readRules();
+            readRules();
 
+            eliminateOptions();
             eliminateOptions();
 
             //Checks to see if the game was won
             if(gameWon())
             {
                 displayData();
-                System.out.println("You have cracked the case! The fish is in House " + houseNumber + "!");
+                System.out.println("You have cracked the case! The fish is in House " + answer + "!");
                 break;
             }
             displayData();
@@ -202,9 +204,385 @@ public class RiddleSolver {
         {
             if(optionExists(0, i, "B"))
             {
+                optionQuantities[0][0]++;
+            }
 
+            if(optionExists(0, i, "G"))
+            {
+                optionQuantities[0][1]++;
+            }
+
+            if(optionExists(0, i, "R"))
+            {
+                optionQuantities[0][2]++;
+            }
+
+            if(optionExists(0, i, "W"))
+            {
+                optionQuantities[0][3]++;
+            }
+
+            if(optionExists(0, i, "Y"))
+            {
+                optionQuantities[0][4]++;
+            }
+
+            if(optionExists(1, i, "B"))
+            {
+                optionQuantities[1][0]++;
+            }
+
+            if(optionExists(1, i, "D"))
+            {
+                optionQuantities[1][1]++;
+            }
+
+            if(optionExists(1, i, "G"))
+            {
+                optionQuantities[1][2]++;
+            }
+
+            if(optionExists(1, i, "N"))
+            {
+                optionQuantities[1][3]++;
+            }
+
+            if(optionExists(1, i, "S"))
+            {
+                optionQuantities[1][4]++;
+            }
+
+            if(optionExists(2, i, "B"))
+            {
+                optionQuantities[2][0]++;
+            }
+
+            if(optionExists(2, i, "C"))
+            {
+                optionQuantities[2][1]++;
+            }
+
+            if(optionExists(2, i, "D"))
+            {
+                optionQuantities[2][2]++;
+            }
+
+            if(optionExists(2, i, "U"))
+            {
+                optionQuantities[2][3]++;
+            }
+
+            if(optionExists(2, i, "P"))
+            {
+                optionQuantities[2][4]++;
+            }
+
+            if(optionExists(3, i, "B"))
+            {
+                optionQuantities[3][0]++;
+            }
+
+            if(optionExists(3, i, "C"))
+            {
+                optionQuantities[3][1]++;
+            }
+
+            if(optionExists(3, i, "M"))
+            {
+                optionQuantities[3][2]++;
+            }
+
+            if(optionExists(3, i, "T"))
+            {
+                optionQuantities[3][3]++;
+            }
+
+            if(optionExists(3, i, "W"))
+            {
+                optionQuantities[3][4]++;
+            }
+
+            if(optionExists(4, i, "B"))
+            {
+                optionQuantities[4][0]++;
+            }
+
+            if(optionExists(4, i, "C"))
+            {
+                optionQuantities[4][1]++;
+            }
+
+            if(optionExists(4, i, "D"))
+            {
+                optionQuantities[4][2]++;
+            }
+
+            if(optionExists(4, i, "F"))
+            {
+                optionQuantities[4][3]++;
+            }
+
+            if(optionExists(4, i, "H"))
+            {
+                optionQuantities[4][4]++;
             }
         }
+
+        if(optionQuantities[0][0] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "B"))
+                {
+                    data[0][i] = new String[]{"B"};
+                }
+            }
+        }
+
+        if(optionQuantities[0][1] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "G"))
+                {
+                    data[0][i] = new String[]{"G"};
+                }
+            }
+        }
+
+        if(optionQuantities[0][2] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "R"))
+                {
+                    data[0][i] = new String[]{"R"};
+                }
+            }
+        }
+
+        if(optionQuantities[0][3] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "W"))
+                {
+                    data[0][i] = new String[]{"W"};
+                }
+            }
+        }
+
+        if(optionQuantities[0][4] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "Y"))
+                {
+                    data[0][i] = new String[]{"Y"};
+                }
+            }
+        }
+
+        if(optionQuantities[1][0] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "B"))
+                {
+                    data[0][i] = new String[]{"B"};
+                }
+            }
+        }
+
+        if(optionQuantities[1][1] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "D"))
+                {
+                    data[0][i] = new String[]{"D"};
+                }
+            }
+        }
+
+        if(optionQuantities[1][2] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "G"))
+                {
+                    data[0][i] = new String[]{"G"};
+                }
+            }
+        }
+
+        if(optionQuantities[1][3] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "N"))
+                {
+                    data[0][i] = new String[]{"N"};
+                }
+            }
+        }
+
+        if(optionQuantities[1][4] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "S"))
+                {
+                    data[0][i] = new String[]{"S"};
+                }
+            }
+        }
+
+        if(optionQuantities[2][0] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "B"))
+                {
+                    data[0][i] = new String[]{"B"};
+                }
+            }
+        }
+
+        if(optionQuantities[2][1] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "C"))
+                {
+                    data[0][i] = new String[]{"C"};
+                }
+            }
+        }
+
+        if(optionQuantities[2][2] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "D"))
+                {
+                    data[0][i] = new String[]{"D"};
+                }
+            }
+        }
+
+        if(optionQuantities[2][3] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "U"))
+                {
+                    data[0][i] = new String[]{"U"};
+                }
+            }
+        }
+
+        if(optionQuantities[2][4] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "P"))
+                {
+                    data[0][i] = new String[]{"P"};
+                }
+            }
+        }
+
+        if(optionQuantities[3][0] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "B"))
+                {
+                    data[0][i] = new String[]{"B"};
+                }
+            }
+        }
+
+        if(optionQuantities[3][1] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "C"))
+                {
+                    data[0][i] = new String[]{"C"};
+                }
+            }
+        }
+
+        if(optionQuantities[3][2] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "M"))
+                {
+                    data[0][i] = new String[]{"M"};
+                }
+            }
+        }
+
+        if(optionQuantities[3][3] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "T"))
+                {
+                    data[0][i] = new String[]{"T"};
+                }
+            }
+        }
+
+        if(optionQuantities[3][4] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "W"))
+                {
+                    data[0][i] = new String[]{"W"};
+                }
+            }
+        }
+
+        if(optionQuantities[4][0] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "B"))
+                {
+                    data[0][i] = new String[]{"B"};
+                }
+            }
+        }
+
+        if(optionQuantities[4][1] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "C"))
+                {
+                    data[0][i] = new String[]{"C"};
+                }
+            }
+        }
+
+        if(optionQuantities[4][2] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "D"))
+                {
+                    data[0][i] = new String[]{"D"};
+                }
+            }
+        }
+
+        if(optionQuantities[4][3] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "F"))
+                {
+                    data[0][i] = new String[]{"F"};
+                }
+            }
+        }
+
+        if(optionQuantities[4][4] == 1)
+        {
+            for (int i = 0; i < 5; i++) {
+                if (optionExists(0, i, "H"))
+                {
+                    data[0][i] = new String[]{"H"};
+                }
+            }
+        }
+
+        /*
+        for(int[] arr: optionQuantities)
+        {
+            System.out.println(Arrays.toString(arr));
+        }*/
     }
 
     private static boolean optionExists(int i, int j, String value)
@@ -236,7 +614,7 @@ public class RiddleSolver {
         {
             if(data[4][i][0].equals("!F"))
             {
-                houseNumber = i;
+                answer = i;
                 return true;
             }
         }
