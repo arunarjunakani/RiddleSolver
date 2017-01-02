@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -134,12 +133,12 @@ public class RiddleSolver {
                     removeOptionFromCell(indexTwo, 0, valueTwo);
                     for(int i = 0; i < 5; i++)
                     {
-                        if(i < 4 && !optionExists(indexOne, i, valueOne) && optionExists(indexTwo, i + 1, valueTwo))
+                        if(i < 4 && !optionExists(indexOne, i, valueOne) && !optionExists(indexOne, i, "!" + valueOne) && optionExists(indexTwo, i + 1, valueTwo))
                         {
                             removeOptionFromCell(indexTwo, i + 1, valueTwo);
                         }
 
-                        if(i > 0 && !optionExists(indexTwo, i, valueTwo) && optionExists(indexOne, i - 1, valueOne))
+                        if(i > 0 && !optionExists(indexTwo, i, valueTwo) && !optionExists(indexTwo, i, "!" + valueTwo) && optionExists(indexOne, i - 1, valueOne))
                         {
                             removeOptionFromCell(indexOne, i - 1, valueOne);
                         }
@@ -169,6 +168,104 @@ public class RiddleSolver {
                     data[indexOne][indexTwo] = new String[]{valueOne};
                     break;
                 case 'A': //This means the two properties are adjacent
+                    if(optionExists(indexOne, 0, valueOne) && data[indexOne][0].length == 1)
+                    {
+                        data[indexTwo][1] = new String[]{valueTwo};
+                    }
+
+                    if(optionExists(indexOne, 0, "!" + valueOne) && data[indexOne][0].length == 1)
+                    {
+                        data[indexTwo][1] = new String[]{valueTwo};
+                    }
+
+                    if(optionExists(indexOne, 4, valueOne) && data[indexOne][0].length == 1)
+                    {
+                        data[indexTwo][3] = new String[]{valueTwo};
+                    }
+
+                    if(optionExists(indexOne, 4, "!" + valueOne) && data[indexOne][0].length == 1)
+                    {
+                        data[indexTwo][3] = new String[]{valueTwo};
+                    }
+
+                    if(optionExists(indexTwo, 0, valueTwo) && data[indexTwo][0].length == 1)
+                    {
+                        data[indexOne][1] = new String[]{valueOne};
+                    }
+
+                    if(optionExists(indexTwo, 0, "!" + valueTwo) && data[indexTwo][0].length == 1)
+                    {
+                        data[indexOne][1] = new String[]{valueOne};
+                    }
+
+                    if(optionExists(indexTwo, 4, valueTwo) && data[indexTwo][0].length == 1)
+                    {
+                        data[indexOne][3] = new String[]{valueOne};
+                    }
+
+                    if(optionExists(indexTwo, 4, "!" + valueTwo) && data[indexTwo][0].length == 1)
+                    {
+                        data[indexOne][3] = new String[]{valueOne};
+                    }
+
+                    for (int i = 0; i < 5; i++) {
+                        if(!optionExists(indexOne, i, valueOne) && !optionExists(indexOne, i, "!" + valueOne))
+                        {
+                            if(i != 0)
+                            {
+                                removeOptionFromCell(indexTwo, i - 1, valueTwo);
+                            }
+
+                            if(i != 4)
+                            {
+                                removeOptionFromCell(indexTwo, i + 1, valueTwo);
+                            }
+                        }
+
+                        if(!optionExists(indexTwo, i, valueTwo) && !optionExists(indexTwo, i, "!" + valueTwo))
+                        {
+                            if(i != 0)
+                            {
+                                removeOptionFromCell(indexOne, i - 1, valueOne);
+                            }
+
+                            if(i != 4)
+                            {
+                                removeOptionFromCell(indexOne, i + 1, valueOne);
+                            }
+                        }
+
+                        if(optionExists(indexOne, i, valueOne))
+                        {
+                            for (int j = 0; j < 5; j++) {
+                                if(j == i)
+                                {
+                                    break;
+                                }
+
+                                if(optionExists(indexTwo, j, valueTwo) && Math.abs(j - i) > 1)
+                                {
+                                    removeOptionFromCell(indexTwo, j, valueTwo);
+                                }
+                            }
+                        }
+
+                        if(optionExists(indexTwo, i, valueTwo))
+                        {
+                            for (int j = 0; j < 5; j++) {
+                                if(j == i)
+                                {
+                                    break;
+                                }
+
+                                if(optionExists(indexOne, j, valueOne) && Math.abs(j - i) > 1)
+                                {
+                                    removeOptionFromCell(indexOne, j, valueOne);
+                                }
+                            }
+                        }
+                    }
+
                     break;
             }
             eliminateOptions();
