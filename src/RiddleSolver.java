@@ -9,6 +9,7 @@ public class RiddleSolver {
 
     public static String[][][] data;
     public static int answer;
+    private static int numDeletions = 0;
     /**
      * This is the main method where all of the solving will be happening
      * @param String[]
@@ -42,9 +43,10 @@ public class RiddleSolver {
             }
         }
 
+        displayData();
+
         while (true)
         {
-            displayData();
             readRules();
 
             eliminateOptions();
@@ -54,7 +56,7 @@ public class RiddleSolver {
             if(gameWon())
             {
                 displayData();
-                System.out.println("You have cracked the case! The fish is in House " + answer + "!");
+                System.out.println("You have cracked the case! The fish is in House " + (answer + 1) + "!");
                 break;
             }
             displayData();
@@ -74,6 +76,7 @@ public class RiddleSolver {
             System.out.println();
         }
         System.out.println();
+        System.out.println("Num Deletes: " + numDeletions);
     }
 
     /**
@@ -84,7 +87,7 @@ public class RiddleSolver {
     private static void readRules()
     {
         String[] clues = {"1B:0R", "1S:4D", "1D:3T", "0GL0W", "0G:3C", "2U:4B",
-                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BN3W"};
+                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BA3W"};
         for(String s: clues)
         {
             int indexOne = Integer.parseInt(s.substring(0, 1));
@@ -173,17 +176,17 @@ public class RiddleSolver {
                         data[indexTwo][1] = new String[]{valueTwo};
                     }
 
-                    if(optionExists(indexOne, 0, "!" + valueOne) && data[indexOne][0].length == 1)
+                    if(optionExists(indexOne, 0, "!" + valueOne))
                     {
                         data[indexTwo][1] = new String[]{valueTwo};
                     }
 
-                    if(optionExists(indexOne, 4, valueOne) && data[indexOne][0].length == 1)
+                    if(optionExists(indexOne, 4, valueOne) && data[indexOne][4].length == 1)
                     {
                         data[indexTwo][3] = new String[]{valueTwo};
                     }
 
-                    if(optionExists(indexOne, 4, "!" + valueOne) && data[indexOne][0].length == 1)
+                    if(optionExists(indexOne, 4, "!" + valueOne))
                     {
                         data[indexTwo][3] = new String[]{valueTwo};
                     }
@@ -193,75 +196,62 @@ public class RiddleSolver {
                         data[indexOne][1] = new String[]{valueOne};
                     }
 
-                    if(optionExists(indexTwo, 0, "!" + valueTwo) && data[indexTwo][0].length == 1)
+                    if(optionExists(indexTwo, 0, "!" + valueTwo))
                     {
+                        System.out.println("Bleh");
                         data[indexOne][1] = new String[]{valueOne};
                     }
 
-                    if(optionExists(indexTwo, 4, valueTwo) && data[indexTwo][0].length == 1)
+                    if(optionExists(indexTwo, 4, valueTwo) && data[indexTwo][4].length == 1)
                     {
                         data[indexOne][3] = new String[]{valueOne};
                     }
 
-                    if(optionExists(indexTwo, 4, "!" + valueTwo) && data[indexTwo][0].length == 1)
+                    if(optionExists(indexTwo, 4, "!" + valueTwo))
                     {
                         data[indexOne][3] = new String[]{valueOne};
                     }
 
-                    for (int i = 0; i < 5; i++) {
-                        if(!optionExists(indexOne, i, valueOne) && !optionExists(indexOne, i, "!" + valueOne))
-                        {
-                            if(i != 0)
-                            {
-                                removeOptionFromCell(indexTwo, i - 1, valueTwo);
-                            }
-
-                            if(i != 4)
-                            {
-                                removeOptionFromCell(indexTwo, i + 1, valueTwo);
-                            }
-                        }
-
-                        if(!optionExists(indexTwo, i, valueTwo) && !optionExists(indexTwo, i, "!" + valueTwo))
-                        {
-                            if(i != 0)
-                            {
-                                removeOptionFromCell(indexOne, i - 1, valueOne);
-                            }
-
-                            if(i != 4)
-                            {
-                                removeOptionFromCell(indexOne, i + 1, valueOne);
-                            }
-                        }
-
+                    for (int i = 1; i < 4; i++) {
                         if(optionExists(indexOne, i, valueOne))
                         {
-                            for (int j = 0; j < 5; j++) {
-                                if(j == i)
-                                {
-                                    break;
-                                }
-
-                                if(optionExists(indexTwo, j, valueTwo) && Math.abs(j - i) > 1)
-                                {
-                                    removeOptionFromCell(indexTwo, j, valueTwo);
-                                }
+                            if(!(optionExists(indexTwo, i - 1, valueTwo)) && !(optionExists(indexTwo, i + 1, valueTwo)) && !(optionExists(indexTwo, i - 1, "!" + valueTwo)) && !(optionExists(indexTwo, i + 1, "!" + valueTwo)))
+                            {
+                                removeOptionFromCell(indexOne, i, valueOne);
                             }
                         }
 
                         if(optionExists(indexTwo, i, valueTwo))
                         {
-                            for (int j = 0; j < 5; j++) {
-                                if(j == i)
-                                {
-                                    break;
-                                }
+                            if(!(optionExists(indexOne, i - 1, valueOne)) && !(optionExists(indexOne, i + 1, valueOne)) && !(optionExists(indexOne, i - 1, "!" + valueOne)) && !(optionExists(indexOne, i + 1, "!" + valueOne)))
+                            {
+                                removeOptionFromCell(indexTwo, i, valueTwo);
+                            }
+                        }
 
-                                if(optionExists(indexOne, j, valueOne) && Math.abs(j - i) > 1)
-                                {
-                                    removeOptionFromCell(indexOne, j, valueOne);
-                                }
+                        if(optionExists(indexOne, i, "!" + valueOne))
+                        {
+                            if(!(optionExists(indexTwo, i - 1, valueTwo)) && (optionExists(indexTwo, i + 1, valueTwo)))
+                            {
+                                data[indexTwo][i + 1] = new String[]{valueTwo};
+                            }
+
+                            if((optionExists(indexTwo, i - 1, valueTwo)) && !(optionExists(indexTwo, i + 1, valueTwo)))
+                            {
+                                data[indexTwo][i - 1] = new String[]{valueTwo};
+                            }
+                        }
+
+                        if(optionExists(indexTwo, i, "!" + valueTwo))
+                        {
+                            if(!(optionExists(indexOne, i - 1, valueOne)) && (optionExists(indexOne, i + 1, valueOne)))
+                            {
+                                data[indexOne][i + 1] = new String[]{valueOne};
+                            }
+
+                            if((optionExists(indexOne, i - 1, valueOne)) && !(optionExists(indexOne, i + 1, valueOne)))
+                            {
+                                data[indexOne][i - 1] = new String[]{valueOne};
                             }
                         }
                     }
@@ -291,7 +281,6 @@ public class RiddleSolver {
                     {
                         removeOptionFromCell(i, j, value);
                     }
-                    displayData();
                 }
             }
         }
@@ -690,6 +679,10 @@ public class RiddleSolver {
 
     private static void removeOptionFromCell(int i, int j, String value)
     {
+        if(data[i][j].length == 1)
+        {
+            return;
+        }
         ArrayList<String> options = new ArrayList<>(Arrays.asList(data[i][j]));
         if(options.contains(value))
         {
@@ -698,6 +691,7 @@ public class RiddleSolver {
         String[] arr = new String[options.size()];
         arr = options.toArray(arr);
         data[i][j] = arr;
+        numDeletions++;
     }
 
     /**
