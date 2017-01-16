@@ -9,7 +9,6 @@ public class RiddleSolver {
 
     public static String[][][] data;
     public static int answer;
-    private static int numDeletions = 0;
     /**
      * This is the main method where all of the solving will be happening
      * @param String[]
@@ -50,7 +49,6 @@ public class RiddleSolver {
             readRules();
 
             eliminateOptions();
-            eliminateOptions();
 
             //Checks to see if the game was won
             if(gameWon())
@@ -59,6 +57,7 @@ public class RiddleSolver {
                 System.out.println("You have cracked the case! The fish is in House " + (answer + 1) + "!");
                 break;
             }
+
             displayData();
             System.out.println("Press enter to continue.");
             new Scanner(System.in).nextLine();
@@ -67,6 +66,7 @@ public class RiddleSolver {
 
     private static void displayData()
     {
+        fixingSyntax();
         for (String[][] row: data)
         {
             for(String[] cell: row)
@@ -76,7 +76,6 @@ public class RiddleSolver {
             System.out.println();
         }
         System.out.println();
-        System.out.println("Num Deletes: " + numDeletions);
     }
 
     /**
@@ -198,7 +197,6 @@ public class RiddleSolver {
 
                     if(optionExists(indexTwo, 0, "!" + valueTwo))
                     {
-                        System.out.println("Bleh");
                         data[indexOne][1] = new String[]{valueOne};
                     }
 
@@ -228,6 +226,7 @@ public class RiddleSolver {
                                 removeOptionFromCell(indexTwo, i, valueTwo);
                             }
                         }
+
 
                         if(optionExists(indexOne, i, "!" + valueOne))
                         {
@@ -259,6 +258,28 @@ public class RiddleSolver {
                     break;
             }
             eliminateOptions();
+        }
+    }
+
+    /**
+     * This makes sure that one cell arrays have exclamation marks
+     * @param null
+     * @return void
+     */
+    private static void fixingSyntax()
+    {
+        for(String[][] row : data)
+        {
+            for(String[] cell: row)
+            {
+                if(cell.length == 1)
+                {
+                    if(cell[0].charAt(0) != '!')
+                    {
+                        cell[0] = "!" + cell[0];
+                    }
+                }
+            }
         }
     }
 
@@ -674,7 +695,7 @@ public class RiddleSolver {
     private static boolean optionExists(int i, int j, String value)
     {
         ArrayList<String> options = new ArrayList<>(Arrays.asList(data[i][j]));
-        return options.contains(value);
+        return (options.contains(value) || options.contains("!" + value));
     }
 
     private static void removeOptionFromCell(int i, int j, String value)
@@ -691,7 +712,6 @@ public class RiddleSolver {
         String[] arr = new String[options.size()];
         arr = options.toArray(arr);
         data[i][j] = arr;
-        numDeletions++;
     }
 
     /**
