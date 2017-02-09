@@ -17,18 +17,28 @@ public class RiddleSolver {
      * @return void
      */
     public static void main(String[] args) {
-        data = new String[5][5][];
+        //data = new String[5][5][];
         answer = -1;
 
-        int numClues = Integer.parseInt(JOptionPane.showInputDialog("How many clues are there?"));
+        /*int numClues = Integer.parseInt(JOptionPane.showInputDialog("How many clues are there?"));
         clues = new String[numClues];
         for (int i = 0; i < numClues; i++) {
             String clue = JOptionPane.showInputDialog("Enter Clue " + (i+1) + ":");
-            System.out.println(clue);
             clues[i] = clue;
+        }*/
+
+        int numOptions = Integer.parseInt(JOptionPane.showInputDialog("How many options are there?"));
+        int numProperties = Integer.parseInt(JOptionPane.showInputDialog("How many properties are there?"));
+        String[][] options = new String[numProperties][numOptions];
+        for (int i = 0; i < numProperties; i++) {
+            for (int j = 0; j < numOptions; j++) {
+                String option = JOptionPane.showInputDialog("Enter Option " + (j+1) + " of Property " + (i+1) + ": ");
+                options[i][j] = option;
+                System.out.println(option);
+            }
         }
 
-        System.out.println(numClues);
+        data = new String[numProperties][numOptions][];
 
         for(int i = 0; i < 5; i++) //Initializes the array
         {
@@ -98,8 +108,8 @@ public class RiddleSolver {
      */
     private static void readRules()
     {
-        /*clues = new String[]{"1B:0R", "1S:4D", "1D:3T", "0GL0W", "0G:3C", "2U:4B",
-                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BA3W"};*/
+        clues = new String[]{"1B:0R", "1S:4D", "1D:3T", "0GL0W", "0G:3C", "2U:4B",
+                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BA3W"};
         for(String s: clues)
         {
             int indexOne = Integer.parseInt(s.substring(0, 1));
