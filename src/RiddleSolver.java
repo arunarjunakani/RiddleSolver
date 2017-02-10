@@ -11,21 +11,24 @@ public class RiddleSolver {
     public static String[][][] data;
     public static int answer;
     public static String[] clues;
+    public static String objective;
+
     /**
      * This is the main method where all of the solving will be happening
      * @param String[]
      * @return void
      */
     public static void main(String[] args) {
-        //data = new String[5][5][];
         answer = -1;
+        objective = "-1";
 
-        /*int numClues = Integer.parseInt(JOptionPane.showInputDialog("How many clues are there?"));
+        // This is manual clue input
+        int numClues = Integer.parseInt(JOptionPane.showInputDialog("How many clues are there?"));
         clues = new String[numClues];
         for (int i = 0; i < numClues; i++) {
             String clue = JOptionPane.showInputDialog("Enter Clue " + (i+1) + ":");
             clues[i] = clue;
-        }*/
+        }
 
         int numOptions = Integer.parseInt(JOptionPane.showInputDialog("How many options are there?"));
         int numProperties = Integer.parseInt(JOptionPane.showInputDialog("How many properties are there?"));
@@ -40,6 +43,24 @@ public class RiddleSolver {
 
         data = new String[numProperties][numOptions][];
 
+        for (int i = 0; i < numProperties; i++) {
+            for (int j = 0; j < numOptions; j++) {
+                data[i][j] = options[i];
+            }
+        }
+
+
+        objective = JOptionPane.showInputDialog("What is the goal?");
+        System.out.println(objective);
+
+
+        // This is the default option input for Einstein's riddle
+        /*
+
+        clues = new String[]{"1B:0R", "1S:4D", "1D:3T", "0GL0W", "0G:3C", "2U:4B",
+                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BA3W"};
+
+        data = new String[5][5][];
         for(int i = 0; i < 5; i++) //Initializes the array
         {
             for(int j = 0; j < 5; j++)
@@ -65,6 +86,11 @@ public class RiddleSolver {
             }
         }
 
+
+
+*/
+
+
         displayData();
 
         while (true)
@@ -77,7 +103,7 @@ public class RiddleSolver {
             if(gameWon())
             {
                 displayData();
-                System.out.println("You have cracked the case! The fish is in House " + (answer + 1) + "!");
+                System.out.println("You have cracked the case! The object you are looking for is in cell " + (answer + 1) + "!");
                 break;
             }
 
@@ -108,15 +134,16 @@ public class RiddleSolver {
      */
     private static void readRules()
     {
-        clues = new String[]{"1B:0R", "1S:4D", "1D:3T", "0GL0W", "0G:3C", "2U:4B",
-                "0Y:2D", "3ME22", "1NE00", "2BA4C", "4HA2D", "2C:3B", "1G:2P", "1NA0B", "2BA3W"};
         for(String s: clues)
         {
             int indexOne = Integer.parseInt(s.substring(0, 1));
             String valueOne = s.substring(1, 2);
             int indexTwo = Integer.parseInt(s.substring(3, 4));
             String valueTwo = s.substring(4, 5);
-
+            if(s.charAt(2) == 'R')
+            {
+                s = "" + indexOne + valueOne + 'L' + indexTwo + valueTwo;
+            }
             switch(s.charAt(2))
             {
                 case ':': //This is binding between 2 properties
@@ -743,9 +770,16 @@ public class RiddleSolver {
      */
     private static boolean gameWon()
     {
-        for(int i = 0; i < 5; i++)
+        int index = -1;
+        char c = '0';
+        if(objective.charAt(0) == 'E')
         {
-            if(data[4][i][0].equals("!F"))
+            index = Integer.parseInt(objective.substring(1, 2));
+            c = objective.charAt(2);
+        }
+        for(int i = 0; i < data.length; i++)
+        {
+            if(data[index][i][0].equals("!" + c))
             {
                 answer = i;
                 return true;
